@@ -42,6 +42,17 @@ const ItemCtrl = (function() {
 
             return newItem;
         },
+        getTotalCalories: function() {
+            let total = 0;
+            //loop through item to add calories
+            data.items.forEach(function(item){
+                total += item.calories;
+            });
+            //set total calories in data structure
+            data.totalCalories = total;
+
+            return data.totalCalories;
+        },
         logData: function() {
             return data;
         }
@@ -54,7 +65,8 @@ const UICtrl = (function() {
        itemList: '#item-list',
        addBtn: '.add-btn',
        itemNameInput: '#item-name',
-       itemCaloriesInput: '#item-calories'
+       itemCaloriesInput: '#item-calories',
+       totalCalories: '.total-calories'
    }
 
     return {
@@ -103,6 +115,9 @@ const UICtrl = (function() {
             document.querySelector(UISelectors.itemNameInput).value = '';
             document.querySelector(UISelectors.itemCaloriesInput).value = '';
         },
+        showTotalCalories: function(totalCalories) {
+            document.querySelector(UISelectors.totalCalories).textContent = totalCalories;
+        },
         getSelectors: function() {
             return UISelectors;
         }
@@ -126,6 +141,11 @@ const App = (function(ItemCtrl, UICtrl) {
            //add item to UI list
            UICtrl.addListItem(newItem);
 
+           //get total calories
+           const totalCalories = ItemCtrl.getTotalCalories();
+           //add total calories to UI
+           UICtrl.showTotalCalories(totalCalories);
+           
            //clear input
            UICtrl.clearInput();
         }
@@ -145,6 +165,11 @@ const App = (function(ItemCtrl, UICtrl) {
                 //populate list with items
             UICtrl.populateItemList(items);
             }
+
+            //get total calories
+           const totalCalories = ItemCtrl.getTotalCalories();
+           //add total calories to UI
+           UICtrl.showTotalCalories(totalCalories);
             
             
             loadEventListeners();
